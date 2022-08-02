@@ -13,7 +13,6 @@ const Form = () => {
 
     dispatch(addTodo({ id: nanoid(), title, completed: false }));
     setTitle("");
-    
   };
 
   return (

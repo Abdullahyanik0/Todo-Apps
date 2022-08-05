@@ -1,32 +1,49 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addTodo } from "redux/todos/todosSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addTodoAsync } from "redux/todos/todosSlice";
+import Loading from "./Loading";
 
 const Form = () => {
   const [title, setTitle] = useState("");
 
   const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
+  const isLoading = useSelector((state) => state.todos.addNewTodoIsLoading);
+
+  const handleSubmit = async (e) => {
     if (!title) return;
     e.preventDefault();
+    
 
-    dispatch(addTodo({ title }));
+    await dispatch(addTodoAsync({ title }));
     setTitle("");
   };
 
+  const clear = () =>{
+    
+  }
+ 
   return (
-    <div className="mt-4">
-      <form onSubmit={handleSubmit}>
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          autoFocus
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </form>
-    </div>
+    <form
+      style={{
+        display: "flex",
+        alignItems: "center",
+        paddingRight: "10px",
+      }}
+      onSubmit={handleSubmit}
+    >
+      <input
+        disabled={isLoading}
+        className="new-todo"
+        placeholder="What needs to be done?"
+        autoFocus
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+
+      {isLoading && <span><Loading /></span>}
+     
+    </form>
   );
 };
 
